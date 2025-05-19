@@ -1,0 +1,29 @@
+name: Snyk Goof Integration
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  snyk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Snyk CLI
+        run: npm install -g snyk
+
+      - name: Run Snyk Test
+        run: snyk test
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Run Snyk Monitor
+        run: snyk monitor
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
